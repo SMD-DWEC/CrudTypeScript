@@ -1,18 +1,34 @@
 class Controlador{
+  paises: Set<Pais>;
+  paisEditado: Pais;
   constructor(){
     window.onload = this.iniciar.bind(this)
 
     this.paises = new Set()
     this.paisEditado = null
   }
+
+  //Referencias de iniciar:
+  iNombre: HTMLInputElement;
+  iPoblacion: HTMLInputElement;
+  btnCrear: HTMLButtonElement;
+  divEditar: HTMLElement;
+  iEditarNombre: HTMLElement;
+  iEditarPoblacion: HTMLInputElement;
+  btnModificar: HTMLElement;
+  aCancelar: HTMLElement;
+  divLista: HTMLElement;
+
+  //Referencias 
+  
   iniciar(){
     //Referencias
-    this.iNombre = document.getElementById('iNombre')
-    this.iPoblacion = document.getElementById('iPoblacion')
-    this.btnCrear = document.getElementById('btnCrear')
+    this.iNombre = <HTMLInputElement>document.getElementById('iNombre')
+    this.iPoblacion = <HTMLInputElement>document.getElementById('iPoblacion')
+    this.btnCrear = <HTMLButtonElement>document.getElementById('btnCrear')
     this.divEditar = document.getElementById('divEditar')
-    this.iEditarNombre = document.getElementById('iEditarNombre')
-    this.iEditarPoblacion = document.getElementById('iEditarPoblacion')
+    this.iEditarNombre = <HTMLInputElement>document.getElementById('iEditarNombre')
+    this.iEditarPoblacion = <HTMLInputElement>document.getElementById('iEditarPoblacion')
     this.btnModificar = document.getElementById('btnModificar')
     this.aCancelar = document.getElementById('aCancelar')
     this.divLista = document.getElementById('divLista')
@@ -22,6 +38,7 @@ class Controlador{
     this.btnModificar.onclick = this.modificar.bind(this)
     this.aCancelar.onclick = this.cancelar.bind(this)
   }
+
   mostrar(){
     //Borramos el interfaz
     while (this.divLista.firstChild)
@@ -41,9 +58,10 @@ class Controlador{
       this.divLista.appendChild(p)
     }
   }
+
   crear(){
     let nombre = this.iNombre.value
-    let poblacion = this.iPoblacion.value
+    let poblacion = Number(this.iPoblacion.value)
     let pais = new Pais(nombre, poblacion)
     this.paises.add(pais)
 
@@ -53,29 +71,38 @@ class Controlador{
 
     this.mostrar()
   }
-  editar(pais){
-    this.iEditarNombre.value = pais.nombre
-    this.iEditarPoblacion.value = pais.poblacion
-    this.paisEditado = pais
-    this.divEditar.style.display = 'block'
+
+  editar(pais:Pais) {
+    (<HTMLInputElement>this.iEditarNombre).value = pais.nombre;
+    //(this.iEditarNombre as HTMLInputElement).value = pais.nombre;
+
+    this.iEditarPoblacion.value = ""+pais.poblacion;
+    this.paisEditado = pais;
+    this.divEditar.style.display = 'block';
   }
+  
   modificar(){
-    this.paisEditado.nombre = this.iEditarNombre.value
-    this.paisEditado.poblacion = this.iEditarPoblacion.value
+    this.paisEditado.nombre = (<HTMLInputElement>this.iEditarNombre).value
+    this.paisEditado.poblacion = Number(this.iEditarPoblacion.value)
     this.cancelar()
     this.mostrar()
   }
+
   cancelar(){
     this.divEditar.style.display = 'none'
   }
-  eliminar(pais){
+
+  eliminar(pais:Pais){
     this.paises.delete(pais)
     this.mostrar()
   }
+  
 }
 
 class Pais{
-  constructor(nombre, poblacion){
+  nombre: string;
+  poblacion: number;
+  constructor(nombre:string, poblacion:number){
     this.nombre = nombre
     this.poblacion = poblacion
   }
